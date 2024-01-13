@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MQTT Client</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.2.8/mqtt.min.js"></script>
+  </head>
+
+  <body>
+    <script>
+      // MQTT client script goes here
+      const mqtt = require("mqtt");
+
+      // Define MQTT broker details
+      const brokerUrl =
+        "mqtts://e9a5c8d44ce34c2c97e290e0e58983cb.s2.eu.hivemq.cloud:8883";
+      const clientId = "web-client-" + Math.random().toString(16).substr(2, 8);
+      const username = "ShafinAhmed";
+      const password = "ShafinAhmed";
+      // Create an MQTT client
+      const client = mqtt.connect(brokerUrl, {
+        clientId: clientId,
+        username: username,
+        password: password,
+      });
+
+      // Handle the 'connect' event
+      client.on("connect", () => {
+        console.log("Connected to MQTT broker");
+
+        // Subscribe to a topic
+        const topic = "hello world "; // Replace with the MQTT topic you want to subscribe to
+        client.subscribe(topic, (err) => {
+          if (!err) {
+            console.log("Subscribed to", topic);
+          }
+        });
+
+        // Publish a message to a topic
+        client.publish(topic, "Hello, MQTT!");
+      });
+
+      // Handle the 'message' event
+      client.on("message", (topic, message) => {
+        console.log(
+          `Received message on topic ${topic}: ${message.toString()}`
+        );
+      });
+
+      // Handle the 'error' event
+      client.on("error", (err) => {
+        console.error("Error:", err);
+      });
+    </script>
+  </body>
+</html>
